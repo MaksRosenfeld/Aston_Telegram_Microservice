@@ -29,10 +29,10 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
-            WebClient wc = WebClient.builder().baseUrl("http://localhost:8080/").build();
+            WebClient wc = WebClient.builder().baseUrl("http://my-tomcat:8080/ms1").build();
             String answer = wc
                     .get()
-                    .uri("api/check")
+                    .uri("/api/check")
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
