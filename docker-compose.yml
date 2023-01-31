@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  my-tomcat:
+    build: ./ms1
+    container_name: my-tomcat
+    ports:
+      - "8080:8080"
+
+  my-bot:
+    build: ./bot
+    container_name: my-bot
