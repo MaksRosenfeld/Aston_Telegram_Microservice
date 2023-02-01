@@ -1,4 +1,4 @@
-package rosenfeld;
+package com.rosenfeld;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;

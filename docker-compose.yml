@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  db:
+    image: postgres
+    restart: always
+    container_name: pg
+    environment:
+      POSTGRES_PASSWORD: postgres
+
   my-tomcat:
     build: ./ms1
     container_name: my-tomcat
