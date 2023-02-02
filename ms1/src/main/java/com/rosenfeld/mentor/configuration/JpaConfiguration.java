@@ -1,4 +1,4 @@
-package com.rosenfeld.configuration;
+package com.rosenfeld.mentor.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ComponentScan("com.rosenfeld")
-@EnableJpaRepositories(basePackages = {"com.rosenfeld.repository"})
+@EnableJpaRepositories(basePackages = {"com.rosenfeld.mentor.repository"})
 @EnableTransactionManagement
 public class JpaConfiguration {
 

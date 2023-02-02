@@ -1,4 +1,4 @@
-package com.rosenfeld.model;
+package com.rosenfeld.mentor.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.rosenfeld;
+package com.rosenfeld.mentor;
 
-import com.rosenfeld.configuration.JpaConfiguration;
+import com.rosenfeld.mentor.configuration.JpaConfiguration;
 import jakarta.servlet.ServletRegistration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;

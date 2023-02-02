@@ -1,10 +1,8 @@
-package com.rosenfeld.repository;
+package com.rosenfeld.mentor.repository;
 
-import com.rosenfeld.model.Mentor;
+import com.rosenfeld.mentor.model.Mentor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.UUID;
 
 @Repository
 public interface MentorRepository extends JpaRepository<Mentor, Integer> {

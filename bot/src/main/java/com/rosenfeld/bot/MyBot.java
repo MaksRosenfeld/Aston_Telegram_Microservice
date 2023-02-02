@@ -1,24 +1,42 @@
-package org.example;
+package com.rosenfeld.bot;
 
 
-import lombok.extern.slf4j.Slf4j;
+import com.rosenfeld.command.Command;
+import com.rosenfeld.command.UnknownCommand;
+import com.rosenfeld.configuration.BotConfiguration;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component("bot")
+@Getter
 public class MyBot extends TelegramLongPollingBot {
+
+    private Map<String, Command> commands = new HashMap<>();
+
+    private final BotConfiguration botConfiguration;
+
+    @Autowired
+    public MyBot(BotConfiguration botConfiguration) {
+        this.botConfiguration = botConfiguration;
+    }
     @Override
     public String getBotUsername() {
-        return "junior_helper_bot";
+        return botConfiguration.getUserName();
     }
 
     @Override
     public String getBotToken() {
-        return "5943774149:AAGGVbO-b53rB_SAn3_VHZBV00NUtBN-Qug";
+        return botConfiguration.getToken();
     }
 
     @Override
@@ -30,23 +48,22 @@ public class MyBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String receivedText = update.getMessage().getText();
-            String firstName = update.getMessage().getChat().getFirstName();
             String chatId = update.getMessage().getChatId().toString();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(chatId);
+            String answer = commands
+                    .getOrDefault(receivedText, commands.get("unknown"))
+                    .getAnswer(update);
             WebClient wc = WebClient.builder().baseUrl("http://my-tomcat:8080/ms1").build();
-            String answer = wc
+            String answerAPI = wc
                     .get()
                     .uri("/api/check")
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
 
-            if ("/start".equals(receivedText)) {
-                message.setText("Hello " + firstName);
-            } else {
-                message.setText("I don't know this command yet! But here is data from API\n" + answer);
-            }
+            message.setText(answer + " " + answerAPI);
+
 
             try {
                 execute(message); // Call method to send the message
@@ -55,6 +72,10 @@ public class MyBot extends TelegramLongPollingBot {
             }
         }
 
+    }
+
+    public void registerCommand(Command command) {
+        commands.put(command.commandName(), command);
     }
 
     public void check() {
