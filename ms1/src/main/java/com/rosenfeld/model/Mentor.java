@@ -6,15 +6,15 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "game")
+@Table(name = "mentor")
 @Getter
 public class Mentor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name = "game_name")
+    @Column(name = "name")
     private String name;
 
 

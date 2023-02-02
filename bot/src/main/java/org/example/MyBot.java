@@ -29,8 +29,11 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
+            String receivedText = update.getMessage().getText();
+            String firstName = update.getMessage().getChat().getFirstName();
+            String chatId = update.getMessage().getChatId().toString();
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
-            message.setChatId(update.getMessage().getChatId().toString());
+            message.setChatId(chatId);
             WebClient wc = WebClient.builder().baseUrl("http://my-tomcat:8080/ms1").build();
             String answer = wc
                     .get()
@@ -39,7 +42,11 @@ public class MyBot extends TelegramLongPollingBot {
                     .bodyToMono(String.class)
                     .block();
 
-            message.setText(update.getMessage().getText() + answer);
+            if ("/start".equals(receivedText)) {
+                message.setText("Hello " + firstName);
+            } else {
+                message.setText("I don't know this command yet! But here is data from API\n" + answer);
+            }
 
             try {
                 execute(message); // Call method to send the message
